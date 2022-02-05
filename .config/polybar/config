@@ -10,7 +10,7 @@ content = ▲ ▲ ▲
 [bar/top]
 monitor = HDMI-0
 width = 100%
-height = 35
+height = 15
 offset-x = 0
 offset-y = 0
 radius = 0
@@ -20,55 +20,13 @@ module-margin = 0
 underline-size = 2
 underline-color = #eee
 wm-restack = bspwm
-font-0 = "Fira Code:pixelsize=12;0"
-font-1 = "Fire Code:pixelsize=10;2"
+font-0 = "Fira Code:pixelsize=8;0"
+font-1 = "Fire Code:pixelsize=6;2"
 background = #3d3d3d
 foreground = #d3d0c8
 modules-left = bspwm
 modules-center = network
-modules-right =
-
-[bar/work1]
-monitor = DVI-D-0
-width = 100%
-height = 35
-offset-x = 0
-offset-y = 0
-radius = 0
-padding-left = 0
-padding-right = 0
-module-margin = 0
-underline-size = 2
-underline-color = #eee
-wm-restack = bspwm
-font-0 = "Fira Code:pixelsize=12;0"
-font-1 = "Fire Code:pixelsize=10;2"
-background = #3d3d3d
-foreground = #d3d0c8
-modules-left = bspwm
-modules-center = 
 modules-right = volume date
-
-[bar/off]
-monitor = DP-4
-width = 100%
-height = 35
-offset-x = 0
-offset-y = 0
-radius = 0
-padding-left = 0
-padding-right = 0
-module-margin = 0
-underline-size = 2
-underline-color = #eee
-wm-restack = bspwm
-font-0 = "Noto Sans CJK SC:pixelsize=12;0"
-font-1 = "Hack Nerd Font:pixelsize=10;2"
-background = ${colors.semitransparent}
-foreground = #ffffff
-modules-left = bspwm
-modules-center = temperature
-modules-right = cpu
 
 [module/bspwm]
 type = internal/bspwm
@@ -99,24 +57,6 @@ ws-icon-9 = 9;9
 
 ws-icon-default = -
 
-
-
-[module/cpu]
-type = internal/cpu
-format = <label> <ramp-coreload>
-ramp-coreload-font = 3
-ramp-coreload-5-foreground = ${colors.red}
-ramp-coreload-6-foreground = ${colors.red}
-ramp-coreload-7-foreground = ${colors.red}
-ramp-coreload-0 = ▁
-ramp-coreload-1 = ▂
-ramp-coreload-2 = ▃
-ramp-coreload-3 = ▄
-ramp-coreload-4 = ▅
-ramp-coreload-5 = ▆
-ramp-coreload-6 = ▇
-ramp-coreload-7 = █
-
 [module/date]
 type = internal/date
 label = %date% %time%
@@ -129,7 +69,7 @@ format =    <label>
 
 [module/wired-network]
 type = internal/network
-interface = eth1
+interface = enp3s0 
 
 [module/wireless-network]
 type = internal/network
@@ -167,33 +107,6 @@ accumulate-stats = true
 ; an unknown state, even when they're running
 ; Default: false
 unknown-as-up = true
-
-[module/battery]
-type = internal/battery
-full-at = 99
-battery = BAT0
-adapter = AC
-poll-interval = 5
-format-charging = <animation-charging>  <label-charging>
-format-discharging = <ramp-capacity>  <label-discharging>
-format-full = <ramp-capacity>  <label-full>
-label-charging = %percentage%
-label-discharging = %percentage%
-label-full = %percentage%
-format-charging-padding = 3
-format-discharging-padding = 3
-format-full-padding = 3
-ramp-capacity-0 = 0
-ramp-capacity-1 = 1
-ramp-capacity-2 = 2
-ramp-capacity-3 = 3
-ramp-capacity-4 = 4
-animation-charging-0 = 0
-animation-charging-1 = 1
-animation-charging-2 = 3
-animation-charging-3 = 4
-animation-charging-4 = 5
-animation-charging-framerate = 750
 
 [module/temperature]
 type = internal/temperature
