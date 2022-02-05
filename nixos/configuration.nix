@@ -72,28 +72,17 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    htop direnv stow wget vim neovim barrier file mkpasswd neofetch
+    htop direnv stow wget vim neovim barrier file neofetch
     firefox chromium
-
+    spotify
     capture scrot vlc gimp
 
     i3lock betterlockscreen xorg.xdpyinfo bc feh
     polybar rofi rxvt-unicode alacritty
 
     git
-
-    gnumake
-
-    gcc go
-    ghc stack
-
     docker-compose podman-compose
-
-    nodejs deno yarn nodePackages.typescript
-    insomnia cypress
-
-    vscodium
-
+    insomnia vscodium
     blender tiled
 
     keybase-gui signal-desktop   
