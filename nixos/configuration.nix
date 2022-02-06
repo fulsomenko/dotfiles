@@ -46,7 +46,8 @@
     keyMap = "us";
   };
 
-  # Enable the GNOME 3 Desktop Environment.
+  nixpkgs.config.allowUnfree = true;
+
   services = {
     xserver = {
       enable = true;
@@ -74,9 +75,9 @@
   environment.systemPackages = with pkgs; [
     htop direnv stow wget vim neovim barrier file neofetch
     firefox chromium
-    spotify
+    spotify 
     capture scrot vlc gimp
-
+    
     i3lock betterlockscreen xorg.xdpyinfo bc feh
     polybar rofi rxvt-unicode alacritty
 
