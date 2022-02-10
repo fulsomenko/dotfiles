@@ -230,7 +230,20 @@ in
     kbfs.enable = true;
     pcscd.enable = true;
     udev.packages = [ pkgs.yubikey-personalization ];
-    zfs.trim.enable = true;
+    zfs = {
+      trim = {
+        enable = true;
+        interval = "weekly";
+      };
+      autoScrub = {
+        enable = true;
+        interval = "monthly";
+      };
+      autoSnapshot = {
+        enable = true;
+        #autoSnapshot.interval = "monthly";
+      };
+    };
     openssh.enable = true; 
   };
 
