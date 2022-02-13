@@ -20,6 +20,9 @@ in
 {
   imports =
     [
+      ./nvim.nix
+      ./services/redis.nix
+      ./services/registry.nix
       ./hardware-configuration.nix
     ];
 
@@ -136,7 +139,8 @@ in
       obsidian
       nebula
       barrier
-      unstable.fly
+      # unstable.fly
+      fly
       linuxPackages.bcc
       direnv
       wget
@@ -295,6 +299,12 @@ in
     mosh.enable = true;
     mosh.withUtempter = true;
     dconf.enable = true;
+    zsh = {
+      enable = true;
+      autosuggestions.enable = true;
+      syntaxHighlighting.enable = true;
+      enableCompletion = true;
+    };
     neovim = {
       enable = true;
       withNodeJs = true;
