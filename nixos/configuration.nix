@@ -9,6 +9,7 @@ let
     config = {
       allowUnfree = true;
       programs.vim.enable = true;
+#      pulseaudio = true;
     };
   };
 
@@ -24,6 +25,8 @@ in
       ./services/redis.nix
       ./services/registry.nix
       ./hardware-configuration.nix
+
+      <musnix>
     ];
 
   nix = {
@@ -39,9 +42,11 @@ in
   # Save builder configuration.nix /run/current-system/full-config
   system.extraSystemBuilderCmds = "ln -s ${./.} $out/full-config";
 
+  musnix.enable = true;
+
   users.users.max = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "video" "libvirtd" "usb" "docker" "network" ];
+    extraGroups = [ "wheel" "video" "audio" "libvirtd" "usb" "docker" "network" "jackaudio" ];
     shell = pkgs.zsh;
   };
 
@@ -61,7 +66,21 @@ in
     cpu.amd.updateMicrocode = true;
     enableRedistributableFirmware = true;
     bluetooth.enable = true;
-    pulseaudio.enable = true;
+    pulseaudio = {
+      enable = true;
+      daemon.config = {
+        default-sample-rate = 44100;
+        default-sample-format = "s24le";
+        alternate-sample-rate = 48000;
+      };
+      #support32Bit = true;
+      #package = pkgs.pulseaudioFull;
+#      extraConfig = "default-sample-rate = 44100";
+    #  configFile = pkgs.runCommand "default.pa" {} ''
+    #    sed 's/module-udev-detect$/module-udev-detect tsched=0/' \
+    #      ${pkgs.pulseaudio}/etc/pulse/default.pa > $out
+    #  '';
+    };
     #opengl = {
     #  enable = true;
       #driSupport = true;
@@ -69,7 +88,11 @@ in
    # };  
   };
 
-  sound.enable = true;
+  sound = {
+    enable = true;
+  #  extraConfig = "test";
+#    extraConfig = "defaults.pcm.!card \"DNX1600\"\ndefaults.ctl.!card \"DNX1600\"";
+  };
 
   networking = {
     firewall.enable = false;
@@ -83,9 +106,10 @@ in
     nameservers = [ "1.1.1.1" "8.8.8.8" "8.8.4.4" ];
     hostId = "ab79cb21";
     hostName = "a-smol-workstation";
-#   Configure network proxy if necessary
-#   proxy.default = "http://user:password@proxy:port/";
-#   proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+    extraHosts = ''
+      10.10.0.99 a-server
+      10.10.0.100 a-workstation
+    '';
   };
 
   i18n.defaultLocale = "en_US.UTF-8";
@@ -104,95 +128,66 @@ in
       gpg-connect-agent /bye
       export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
     '';
-    systemPackages = with pkgs; [ 
-      ocaml
-      ocamlPackages.merlin
-      
-
+    systemPackages = with pkgs; [
+      qjackctl
+      unstable.reaper
+      bitwarden
+      teams
+      reaper
+      arcan.arcan
+      direnv stow
+      polybar alacritty rxvt-unicode
+      dunst
+      rofi
+      neofetch
       xsel xautomation
-      unstable.tdesktop
-      unstable.arcan.arcan
-      unstable.arcan.xarcan
-      unstable.arcan.pipeworld
       pavucontrol
       gnupg pinentry-curses pinentry-qt paperkey wget
       unstable.discord
-      external-ip
       killall
       openfortivpn
       (import ./vim.nix)
       taskwarrior
-      zoom-us signal-desktop
-      virt-manager
-      dig
+      zoom-us # signal-desktop
+      barrier
       gimp
       libsecret
       xorg.xbacklight
       xdotool xclip
-      bat
+      bat dig htop external-ip zig
       hplip
       mdp
-      google-drive-ocamlfuse
-      neofetch
       niv
-      htop
-      obsidian
-      nebula
-      barrier
-      # unstable.fly
+      unstable.obsidian
       fly
       linuxPackages.bcc
-      direnv
-      wget
-      insomnia
-      dunst
-      polybar
-      rofi
-      alacritty rxvt-unicode
-      git
+      unstable.insomnia
+      unstable.docker-compose
       libcap
       mesa
-      #haskellPackages.OpenGL
-      libGL libGLU freeglut
-      go lua
-      gcc
       unstable.rustup
       unstable.rust-analyzer
       unzip
-      zig
-      unstable.deno
-      stow
-      unstable.glibc
       gtk2-x11
       gtk3-x11
       libnotify
-      # GConfri2
       nss
       xorg.libXScrnSaver
       alsaLib
-      docker-compose
-     # ghc stack
-      mkpasswd
       scrot capture fswebcam
       godot
-      firefox brave chromium
-      google-chrome
-      electron
-      lastpass-cli
+      git
       #unstable.vscode
       unstable.vscode-fhs
-      #dotnetCorePackages.sdk_3_1
-      awscli
-      unstable.bluemix-cli
       slack
-      spotify vlc
-      i3lock
-      betterlockscreen
+      unstable.spotify unstable.vlc
+      i3lock betterlockscreen
       xorg.xdpyinfo
       bc
       feh
-      keybase-gui
-      (pkgs.firefox.override {
+      unstable.keybase-gui
+      unstable.firefox unstable.brave unstable.chromium
+      (unstable.firefox.override {
         extraPolicies = {
           DontCheckDefaultBrowser = true;
           DisablePocket = true;
@@ -209,6 +204,13 @@ in
       videoDrivers = [ "amdgpu" ];
       libinput.enable = true;
       windowManager.bspwm.enable = true;    
+    };
+    jack = {
+      jackd.enable = true;
+      alsa.enable = false;
+      loopback = {
+        enable = true;
+      };
     };
     picom = {
       enable = false;
@@ -304,6 +306,9 @@ in
       autosuggestions.enable = true;
       syntaxHighlighting.enable = true;
       enableCompletion = true;
+     # zsh.shellAliases = {
+      
+     # };
     };
     neovim = {
       enable = true;
